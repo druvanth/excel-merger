@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MERGER</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+    <!-- <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='style.css') }}"
+    /> -->
+
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel="icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Merriweather&family=Montserrat&family=Sacramento&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        text-align: center;
+        font-family: "Merriweather", serif;
+        color: #40514e;
+      }
+      h1 {
+        margin: 50px auto 50px auto;
+        font-family: "Sacramento", cursive;
+        font-size: 5.625rem;
+        color: #66bfbf;
+      }
+
+      h2 {
+        font-family: "Montserrat", sans-serif;
+        font-size: 2.5rem;
+        color: #66bfbf;
+        font-weight: normal;
+        padding-bottom: 10px;
+      }
+
+      h4 {
+        font-family: "Montserrat", sans-serif;
+      }
+
+      .title2 {
+        margin-top: 10px;
+      }
+
+      #directoryForm {
+        padding-top: 30px;
+      }
+
+      .btn {
+        background: #11cdd4;
+        background-image: -webkit-linear-gradient(top, #11cdd4, #11999e);
+        background-image: -moz-linear-gradient(top, #11cdd4, #11999e);
+        background-image: -ms-linear-gradient(top, #11cdd4, #11999e);
+        background-image: -o-linear-gradient(top, #11cdd4, #11999e);
+        background-image: linear-gradient(to bottom, #11cdd4, #11999e);
+        -webkit-border-radius: 8;
+        -moz-border-radius: 8;
+        border-radius: 8px;
+        font-family: "Montserrat", sans-serif;
+        color: #ffffff;
+        font-size: 13px;
+        padding: 5px 10px 5px 10px;
+        text-decoration: none;
+      }
+
+      .btn:hover {
+        background: #30e3cb;
+        background-image: -webkit-linear-gradient(top, #30e3cb, #2bc4ad);
+        background-image: -moz-linear-gradient(top, #30e3cb, #2bc4ad);
+        background-image: -ms-linear-gradient(top, #30e3cb, #2bc4ad);
+        background-image: -o-linear-gradient(top, #30e3cb, #2bc4ad);
+        background-image: linear-gradient(to bottom, #30e3cb, #2bc4ad);
+        text-decoration: none;
+      }
+
+      .bottom-container {
+        background-color: #66bfbf;
+        padding-bottom: 1px;
+        margin-top: 400px;
+        padding-top: 20px;
+      }
+
+      #b1 {
+        margin-left: 10%;
+        /* margin-top: 20px; */
+        margin-top: 3%;
+      }
+
+      #b2 {
+        margin-top: 3%;
+      }
+      
+
+      .fottertext {
+        color: #eaf6f6;
+        font-size: 0.75rem;
+        padding: 20px 0;
+      }
+
+      #downloadLink {
+        margin-top: 10%;
+      }
+
+      @media (max-width: 600px) {
+        .btn {
+          margin-top: 20px;
+          margin-right: 28%;
+        }
+        #b1 {
+          margin-left: 4%;
+        }
+        #b2 {
+          margin-left: 4%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- navbar -->
+    <nav class="navbar bg-dark">
+      <div class="container-fluid">
+        <h1 class="title">Report Merger</h1>
+      </div>
+      <!-- navbar -->
+    </nav>
+    <div>
+      <h2 class="title2">Merge Reports</h2>
+      <h4>Choose the Files in the order in which you want to merge!</h4>
+    </div>
+
+    <form
+      id="myForm"
+      action="/upload"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <input type="file" name="files[]" multiple />
+      <div id="chosenFilesDiv"></div>
+      <button id="b2" class="btn" type="button" onclick="showChosenFiles()">
+        Choose Order
+      </button>
+      <button id="b1" class="btn" type="submit" onclick="myFunction()">
+        Merge Files
+      </button>
+      <script>
+        function myFunction() {
+          alert("Files are merging! Please wait... Don't refresh!");
+        }
+      </script>
+    </form>
+
+    <div id="downloadLink"></div>
+
+    <script>
+      function showChosenFiles() {
+        var fileInput = document.querySelector('input[type="file"]');
+        var chosenFiles = fileInput.files;
+
+        var chosenFilesDiv = document.getElementById("chosenFilesDiv");
+        chosenFilesDiv.innerHTML = "";
+
+        var form = document.createElement("form");
+
+        for (var i = 0; i < chosenFiles.length; i++) {
+          var file = chosenFiles[i];
+          var checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.name = "fileCheckbox";
+          checkbox.value = file.name;
+          checkbox.classList.add("checkbox-style");
+
+          var label = document.createElement("label");
+          label.textContent = file.name;
+
+          var lineBreak = document.createElement("br");
+
+          form.appendChild(checkbox);
+          form.appendChild(label);
+          form.appendChild(lineBreak);
+        }
+
+        chosenFilesDiv.appendChild(form);
+
+        // Update the files[] array based on checkbox order
+        var fileCheckboxes = document.querySelectorAll(
+          'input[name="fileCheckbox"]'
+        );
+        var updatedFiles = [];
+
+        fileCheckboxes.forEach(function (checkbox) {
+          checkbox.addEventListener("change", function () {
+            if (this.checked) {
+              var fileIndex = Array.from(chosenFiles).findIndex(
+                (file) => file.name === this.value
+              );
+              updatedFiles.push(chosenFiles[fileIndex]);
+            } else {
+              var fileIndex = updatedFiles.findIndex(
+                (file) => file.name === this.value
+              );
+              updatedFiles.splice(fileIndex, 1);
+            }
+            console.log(updatedFiles);
+          });
+        });
+
+        // Submit the form
+        var myForm = document.getElementById("myForm");
+        myForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          // Sort the updatedFiles array based on the original file order
+          var sortedFiles = [];
+          for (var i = 0; i < chosenFiles.length; i++) {
+            var fileIndex = Array.from(chosenFiles).findIndex(
+              (file) => file.name === chosenFiles[i].name
+            );
+            sortedFiles.push(updatedFiles[fileIndex]);
+          }
+
+          // Create a FormData object
+          var formData = new FormData();
+
+          // Append the sortedFiles to the FormData object
+          for (var j = 0; j < sortedFiles.length; j++) {
+            formData.append("files[]", sortedFiles[j]);
+          }
+
+          // Perform your AJAX request here using the formData
+          // Example AJAX request using fetch API
+          // fetch('/upload', {
+          //   method: 'POST',
+          //   body: formData
+          // })
+          // .then(response => response.json())
+          // .then(data => {
+          //   // Handle the response from the server
+          //   console.log(data);
+          //   // Update the downloadLink div with the download link provided by the server
+          //   var downloadLinkDiv = document.getElementById("downloadLink");
+          //   downloadLinkDiv.innerHTML = '<a href="' + data.downloadLink + '">Download merged file</a>';
+          // })
+          // .catch(error => {
+          //   // Handle any errors that occur during the request
+          //   console.error(error);
+          // });
+
+          fetch("/upload", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("File upload failed");
+              }
+              return response.blob();
+            })
+            // .then((blob) => {
+            //   // Create a download link for the merged file
+            //   var downloadLink = document.createElement("a");
+            //   downloadLink.href = URL.createObjectURL(blob);
+            //   downloadLink.download = "merged_workbook.xlsx";
+            //   downloadLink.innerText = "Click here to download the merged file";
+            //   document.getElementById("downloadLink").appendChild(downloadLink);
+            // })
+
+            .then((blob) => {
+              // Create a download button for the merged file
+              var downloadButton = document.createElement("button");
+              downloadButton.textContent =
+                "Click here to download the merged file";
+              downloadButton.classList.add("download-button");
+              downloadButton.classList.add("btn");
+            
+              
+
+              // Set the download button behavior
+              downloadButton.addEventListener("click", function () {
+                var downloadLink = document.createElement("a");
+                downloadLink.href = URL.createObjectURL(blob);
+                downloadLink.download = "merged_workbook.xlsx";
+                downloadLink.style.display = "none";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+              });
+
+              // Append the download button to the desired element
+              document
+                .getElementById("downloadLink")
+                .appendChild(downloadButton);
+            })
+
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        });
+      }
+    </script>
+
+    <div class="bottom-container">
+      <a class="footer-link" href="">LinkedIn</a>
+      <a class="footer-link" href="">Website</a>
+      <p class="fottertext">© 2023 KMBL interns @ Home</p>
+    </div>
+     
+  </body>
+</html>
